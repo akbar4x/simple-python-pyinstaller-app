@@ -75,7 +75,7 @@ node {
         stage('Deploy') {
             sh 'pip install pyinstaller'
             sh 'pyinstaller --onefile sources/add2vals.py'
-            sleep 10
+            sleep 60
             echo 'Pipeline has finished successfully.'
             archiveArtifacts artifacts: 'dist/add2vals*', fingerprint: true
         }
