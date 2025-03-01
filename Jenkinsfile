@@ -67,6 +67,14 @@ node {
             junit 'test-reports/results.xml'
         }
         
+        stage('Manual Approval') {
+            steps {
+                script {
+                    input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
+                }
+            }
+        }
+        
         stage('Deploy') {
             sh 'pip install pyinstaller'
             sh 'pyinstaller --onefile sources/add2vals.py'
