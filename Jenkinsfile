@@ -75,6 +75,16 @@ node {
         stage('Deploy') {
             sh 'pip install pyinstaller'
             sh 'pyinstaller --onefile sources/add2vals.py'
+            sh '''
+                apt update && apt install -y openssh-client
+                ssh -V  # Verifikasi instalasi SSH client
+                '''
+                sh 'pwd && ls -la'
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key-ec2', keyFileVariable: 'SSH_KEY')]) {
+                        sh '''
+                        scp -o StrictHostKeyChecking=no -i ${SSH_KEY} dist/add2vals ubuntu@13.229.209.37:/home/ubuntu
+                        '''
+                        }
             sleep 60
             echo 'Pipeline has finished successfully.'
             archiveArtifacts artifacts: 'dist/add2vals*', fingerprint: true
